@@ -1,14 +1,21 @@
 #pragma once
+#ifndef __TEXT_H_INCLUDED__
+#define __TEXT_H_INCLUDED__
 #include <SFML/Graphics.hpp>
 
-class Text {
+class Text : public sf::Text {
 public:
-	Text(std::string str, sf::Font font, float size, sf::Vector2f position);
-	sf::Text CreateText();
+	//Constructors
+	Text();
+	Text(std::string str, sf::Color colour, float size, sf::Vector2f position);
 
 private:
-	std::string textStr;
-	sf::Font textFont;
+	//Variables
 	float textSize;
+
+	//SFML Objects
+	std::string textStr;
 	sf::Vector2f textPosition;
 };
+
+#endif

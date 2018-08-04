@@ -1,12 +1,18 @@
 #pragma once
+#ifndef __WALL_H_INCLUDED__
+#define __WALL_H_INCLUDED__
 #include <SFML/Graphics.hpp>
 
-class Wall {
+class Wall : public sf::RectangleShape{
 public:
-	Wall(sf::Vector2f size, sf::Vector2f position);
-	sf::RectangleShape CreateWall();
+	//Constructors
+	Wall();
+	Wall(sf::Vector2f size, sf::Color colour, sf::Vector2f position);
 
 private:
+	//SFML Objects
 	sf::Vector2f wallSize;
 	sf::Vector2f wallPosition;
 };
+
+#endif
