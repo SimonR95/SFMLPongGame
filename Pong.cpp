@@ -1,10 +1,6 @@
 #include "stdafx.h"
 #include <iostream>
 #include "Pong.h"
-#include "Paddle.h"
-#include "Ball.h"
-#include "Wall.h"
-#include "Text.h"
 
 Pong::Pong() {
 	playerOneScore = 0;
@@ -18,6 +14,7 @@ Pong::Pong() {
 
 	window.create(sf::VideoMode(screenWidth, screenHeight), "Pong");
 	LoadFont();
+	LoadSounds();
 	CreatePaddles();
 	CreateBall();
 	CreateBorders();
@@ -25,11 +22,25 @@ Pong::Pong() {
 }
 
 void Pong::LoadFont() {
-	if (!font.loadFromFile("lucon.ttf")) {
+	if (!font.loadFromFile("assets/lucon.ttf")) {
 		std::cout << "Error loading font\n";
 		exit(EXIT_FAILURE);
 	}
 	std::cout << "Font loaded correctly\n";
+}
+
+void Pong::LoadSounds() {
+	if (!collideBuffer.loadFromFile("assets/collide.wav") || !scoreBuffer.loadFromFile("assets/score.wav") || !pauseBuffer.loadFromFile("assets/pause.wav") || !music.openFromFile("assets/music.wav")) {
+		std::cout << "Error loading one or more sounds\n";
+		exit(EXIT_FAILURE);
+	}
+
+	collide.setBuffer(collideBuffer);
+	score.setBuffer(scoreBuffer);
+	pause.setBuffer(pauseBuffer);
+	music.setLoop(true);
+	music.play();
+	std::cout << "Sounds loaded correctly\n";
 }
 
 void Pong::CreatePaddles() {
@@ -51,7 +62,7 @@ void Pong::CreateText() {
 	playerOneText.setFont(font); //SFML doesn't play nice with fonts assigned in different classes, set font locally for now
 	playerTwoText = Text("Player 2: " + std::to_string(playerTwoScore), sf::Color::White, 20, sf::Vector2f(screenWidth - 200, 50));
 	playerTwoText.setFont(font);
-	pauseText = Text("P A U S E D", sf::Color::White, 50, sf::Vector2f((screenWidth / 2) - 165, screenHeight / 2));
+	pauseText = Text("P A U S E D", sf::Color::White, 50, sf::Vector2f((screenWidth / 2) - 165, (screenHeight / 2) - 30));
 	pauseText.setFont(font);
 }
 
@@ -60,18 +71,18 @@ void Pong::RegisterScores(const int &player) {
 	case 1:
 		playerOneScore++;
 		playerOneText.setString("Player 1: " + std::to_string(playerOneScore));
-		pongBall.setPosition(sf::Vector2f(screenWidth / 2, screenHeight / 2)); //Reset Ball to centre
 		pongBall.SetAngle(0); //Serve to Player 2
 		break;
 	case 2:
 		playerTwoScore++;
 		playerTwoText.setString("Player 2: " + std::to_string(playerTwoScore));
-		pongBall.setPosition(sf::Vector2f(screenWidth / 2, screenHeight / 2)); //Reset Ball to centre
 		pongBall.SetAngle(180); //Serve to Player 1
 		break;
 	default:
 		break;
 	}
+	score.play();
+	pongBall.setPosition(sf::Vector2f(screenWidth / 2, screenHeight / 2)); //Reset Ball to centre
 }
 
 void Pong::Render() {
@@ -95,6 +106,7 @@ int Pong::Run() {
 			if (event.type == sf::Event::Closed || ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape)))
 				window.close();
 			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Space)) {
+				pause.play();
 				paused = !paused;
 			}
 		}
@@ -125,10 +137,12 @@ int Pong::Run() {
 			}
 			//Player One Paddle
 			if (pongBall.getGlobalBounds().intersects(playerOnePaddle.getGlobalBounds()) && cos(pongBall.GetAngle()) <= 0) { //cos(ballAngle) < 0 checks that the ball is coming from the right before reflecting
+				collide.play();
 				pongBall.BallPaddleCollision(playerOnePaddle);
 			}
 			//Player Two Paddle
 			if (pongBall.getGlobalBounds().intersects(playerTwoPaddle.getGlobalBounds()) && cos(pongBall.GetAngle()) >= 0) { //cos(ballAngle) > 0 checks that the ball is coming from the left before reflecting
+				collide.play();
 				pongBall.BallPaddleCollision(playerTwoPaddle);
 			}
 

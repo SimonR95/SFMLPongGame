@@ -1,6 +1,7 @@
 #pragma once
 #ifndef __PONG_H_INCLUDED__
 #define __PONG_H_INCLUDED__
+#include <SFML/Audio.hpp>
 #include "Paddle.h"
 #include "Ball.h"
 #include "Wall.h"
@@ -14,6 +15,7 @@ public:
 	//Methods
 	int Run();
 	void LoadFont();
+	void LoadSounds();
 	void CreatePaddles();
 	void CreateBall();
 	void CreateBorders();
@@ -31,6 +33,13 @@ private:
 	float paddleSpeed;
 
 	//SFML Objects
+	sf::Music music;
+	sf::SoundBuffer collideBuffer;
+	sf::Sound collide;
+	sf::SoundBuffer scoreBuffer;
+	sf::Sound score;
+	sf::SoundBuffer pauseBuffer;
+	sf::Sound pause;
 	sf::RenderWindow window;
 	sf::Event event;
 	sf::Clock clock;
