@@ -1,4 +1,6 @@
 #pragma once
+#ifndef __MENU_H_INCLUDED__
+#define __MENU_H_INCLUDED__
 #include "SFML/Graphics.hpp"
 #include "Text.h"
 
@@ -19,6 +21,8 @@ private:
 	int selectedItemIndex;
 	float width;
 	float height;
-	Text menuText[2];
+	std::vector<Text> menuText;
 	Text menuTitle;
 };
+
+#endif
