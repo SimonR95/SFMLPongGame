@@ -5,7 +5,10 @@
 #include "Paddle.h"
 #include "Ball.h"
 #include "Wall.h"
+#include "Menu.h"
 #include "Text.h"
+
+enum class GameState { Paused, Playing, Menu };
 
 class Pong {
 public:
@@ -21,7 +24,8 @@ public:
 	void CreateBorders();
 	void CreateText();
 	void RegisterScores(const int &player);
-	void Render();
+	void RenderGame();
+	void ResetGame();
 
 private:
 	//Variables
@@ -47,6 +51,7 @@ private:
 	sf::Vector2f paddleSize;
 
 	//Custom Objects
+	GameState gameState;
 	Paddle playerOnePaddle;
 	Paddle playerTwoPaddle;
 	Ball pongBall;
@@ -55,6 +60,7 @@ private:
 	Text playerOneText;
 	Text playerTwoText;
 	Text pauseText;
+	Menu menu;
 };
 
 #endif

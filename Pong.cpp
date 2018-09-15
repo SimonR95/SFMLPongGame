@@ -11,6 +11,7 @@ Pong::Pong() {
 	paddleSize.y = 100;
 	paddleSpeed = 800;
 	paused = false;
+	gameState = GameState::Menu;
 
 	window.create(sf::VideoMode(screenWidth, screenHeight), "Pong");
 	LoadFont();
@@ -19,6 +20,18 @@ Pong::Pong() {
 	CreateBall();
 	CreateBorders();
 	CreateText();
+	menu = Menu(screenWidth, screenHeight);
+}
+
+void Pong::ResetGame() {
+	pongBall.SetAngle(0);
+	pongBall.setPosition(screenWidth / 2, screenHeight / 2);
+	playerOneScore = 0;
+	playerOneText.setString("Player 1: " + std::to_string(playerOneScore));
+	playerTwoScore = 0;
+	playerTwoText.setString("Player 2: " + std::to_string(playerOneScore));
+	playerOnePaddle.setPosition(sf::Vector2f(50, screenWidth / 2));
+	playerTwoPaddle.setPosition(sf::Vector2f(screenWidth - 50, screenWidth / 2));
 }
 
 void Pong::LoadFont() {
@@ -85,7 +98,8 @@ void Pong::RegisterScores(const int &player) {
 	pongBall.setPosition(sf::Vector2f(screenWidth / 2, screenHeight / 2)); //Reset Ball to centre
 }
 
-void Pong::Render() {
+void Pong::RenderGame() {
+	window.clear();
 	window.draw(playerOnePaddle);
 	window.draw(playerTwoPaddle);
 	window.draw(playerOneText);
@@ -93,7 +107,6 @@ void Pong::Render() {
 	window.draw(ceiling);
 	window.draw(floor);
 	window.draw(pongBall);
-	window.display();
 }
 
 int Pong::Run() {
@@ -103,17 +116,65 @@ int Pong::Run() {
 		float factor = time * 400; //Determines speed of Ball
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::Closed || ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape)))
+			switch (gameState) {
+			case GameState::Menu:
+				if (event.type == sf::Event::KeyPressed) {
+					switch (event.key.code) {
+					case sf::Keyboard::Up:
+						menu.MoveUp();
+						break;
+					case sf::Keyboard::Down:
+						menu.MoveDown();
+						break;
+					case sf::Keyboard::Enter:
+						switch (menu.ReturnSelectedItemIndex()) {
+						case 0: //Play button selected
+							gameState = GameState::Playing;
+							break;
+						case 1: //Quit button selected
+							window.close();
+							break;
+						}
+					}
+				}
+				break;
+			case GameState::Playing:
+				if (event.type == sf::Event::KeyPressed) {
+					switch (event.key.code) {
+					case sf::Keyboard::Space:
+						pause.play();
+						gameState = GameState::Paused;
+						break;
+					case sf::Keyboard::Escape:
+						gameState = GameState::Menu;
+						ResetGame();
+						break;
+					}
+				}
+				break;
+			case GameState::Paused:
+				if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Space)) {
+					pause.play();
+					gameState = GameState::Playing;
+				}
+				break;
+			}
+			if (event.type == sf::Event::Closed) {
 				window.close();
-			if ((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Space)) {
-				pause.play();
-				paused = !paused;
 			}
 		}
 
-		if (!paused) { //PLAYING
+		window.clear();
+
+		switch (gameState) {
+		case GameState::Menu:
+			menu.draw(window);
+			menu.setFont(font);
+			window.display();
+			break;
+		case GameState::Playing:
 			pongBall.MoveBall(factor); // Ball Movement
-			
+
 			//CONTROLS
 			//Player 1 Controls
 			playerOnePaddle.ReadInput(ceiling, floor, paddleSpeed * time);
@@ -129,7 +190,7 @@ int Pong::Run() {
 			if (pongBall.getPosition().x < playerOnePaddle.getPosition().x - 50) {
 				RegisterScores(2);
 			}
-			
+
 			//BALL COLLISION
 			//Borders
 			if (pongBall.getGlobalBounds().intersects(ceiling.getGlobalBounds()) || pongBall.getGlobalBounds().intersects(floor.getGlobalBounds())) {
@@ -145,16 +206,16 @@ int Pong::Run() {
 				collide.play();
 				pongBall.BallPaddleCollision(playerTwoPaddle);
 			}
-
-		}
-		window.clear();
-
-		if(paused) {
+			RenderGame();
+			window.display();
+			break;
+		case GameState::Paused:
+			RenderGame();
 			window.draw(pauseText);
+			window.display();
+			break;
+			}
 		}
 
-		Render();
+		return 0;
 	}
-
-	return 0;
-}
