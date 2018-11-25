@@ -89,7 +89,7 @@ void Pong::RegisterScores(const int &player) {
 	case 2:
 		playerTwoScore++;
 		playerTwoText.setString("Player 2: " + std::to_string(playerTwoScore));
-		pongBall.SetAngle(180); //Serve to Player 1
+		pongBall.SetAngle(180 * (3.14159265359 / 180)); //Serve to Player 1
 		break;
 	default:
 		break;
