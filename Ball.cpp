@@ -18,10 +18,10 @@ void Ball::MoveBall(const float &factor) {
 
 void Ball::BallPaddleCollision(const Paddle &playerPaddle) {
 	if (this->getPosition().y > (playerPaddle.getPosition().y)) { //Reflect ball differently based on where it collides
-		ballAngle = ballAngle + 10;
+		ballAngle = 3.14159265359 - ballAngle + 10 * (3.14159265359 /180);
 	}
-	else if (this->getGlobalBounds().intersects(playerPaddle.getGlobalBounds())) {
-		ballAngle = ballAngle - 10;
+	else {
+		ballAngle = 3.14159265359 - ballAngle - 10 * (3.14159265359 / 180);
 	}
 }
 

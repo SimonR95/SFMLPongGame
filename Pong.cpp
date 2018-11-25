@@ -113,7 +113,7 @@ int Pong::Run() {
 	while (window.isOpen())
 	{
 		float time = clock.restart().asSeconds();
-		float factor = time * 400; //Determines speed of Ball
+		float factor = time * 800; //Determines speed of Ball
 		while (window.pollEvent(event))
 		{
 			switch (gameState) {
