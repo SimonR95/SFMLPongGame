@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "Ball.h"
-#include <iostream>
 
 Ball::Ball(){
 };
@@ -23,7 +22,6 @@ std::string Ball::BallPaddleCollision(const Paddle &playerPaddle, const int &pla
 	float intersectPoint = playerPaddle.getPosition().y - this->getPosition().y;
 	float normalisedIntersectPoint = intersectPoint / 50;
 	float bounceModifier = (4 * 3.14159265359) / 15;
-	std::cout << normalisedIntersectPoint << std::endl;
 
 	switch (playerFlag) {
 	case(1):
