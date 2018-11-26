@@ -1,11 +1,12 @@
 # SFML Pong Game
 
-A simple Pong game developed using the SFML library.
+A simple Pong game developed using the SFML library. Ball speed is increased by hitting the ball at the edges of paddles and sharper angles of fire are produced likewise.
 
 ## Controls
 
 - Up + Down - Menu Navigation and move Up and Down for Blue Paddle
 - W + A - Move Up and Down for Red Paddle
+- Space - Pause
 - Enter - Select Menu Item
 - Esc - Return to Menu
 
@@ -15,7 +16,7 @@ Simply run the SFMLPong.exe file but ensure you keep it in the same directory as
 
 ## To do
 
-- Work on better ball physics
+- ~~Work on better ball physics~~
 - Add in network functionality
 - Add an options menu
 
