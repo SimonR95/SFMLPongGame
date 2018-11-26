@@ -18,22 +18,16 @@ void Ball::MoveBall(const float &factor) {
 }
 
 void Ball::BallPaddleCollision(const Paddle &playerPaddle, const int &playerFlag) {
+	float intersectPoint = playerPaddle.getPosition().y - this->getPosition().y;
+	float normalisedIntersectPoint = intersectPoint / 50;
+	float bounceModifier = (4 * 3.14159265359) / 15;
+
 	switch (playerFlag) {
 	case(1):
-		if (this->getPosition().y > (playerPaddle.getPosition().y)) { //Reflect ball differently based on where it collides
-			ballAngle = 3.14159265359 - ballAngle + 10 * (4 * 3.14159265359 / 180);
-		}
-		else {
-			ballAngle = 3.14159265359 - ballAngle - 10 * (4 * 3.14159265359 / 180);
-		}
+		ballAngle = -normalisedIntersectPoint * (bounceModifier);
 		break;
 	case(2):
-		if (this->getPosition().y > (playerPaddle.getPosition().y)) { //Reflect ball differently based on where it collides
-			ballAngle = -(3.14159265359 - ballAngle + 10 * (4 * 3.14159265359 / 180));
-		}
-		else {
-			ballAngle = -(3.14159265359 - ballAngle - 10 * (34 * .14159265359 / 180));
-		}
+		ballAngle = 3.14159265359 + normalisedIntersectPoint * (bounceModifier);
 		break;
 	}
 }
