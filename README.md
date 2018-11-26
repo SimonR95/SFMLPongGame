@@ -6,6 +6,7 @@ A simple Pong game developed using the SFML library.
 
 - Up + Down - Menu Navigation and move Up and Down for Blue Paddle
 - W + A - Move Up and Down for Red Paddle
+- Space - Pause
 - Enter - Select Menu Item
 - Esc - Return to Menu
 
