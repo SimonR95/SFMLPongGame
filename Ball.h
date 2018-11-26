@@ -13,7 +13,7 @@ public:
 	//Methods
 	void MoveBall(const float &factor);
 	void InverseAngle();
-	void BallPaddleCollision(const Paddle &playerPaddle);
+	void BallPaddleCollision(const Paddle &playerPaddle, const int &playerFlag);
 	void SetAngle(const float &angle);
 	float GetAngle();
 

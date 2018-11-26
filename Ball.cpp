@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Ball.h"
+#include <iostream>
 
 Ball::Ball(){
 };
@@ -16,12 +17,24 @@ void Ball::MoveBall(const float &factor) {
 	this->move(std::cos(ballAngle)*factor, std::sin(ballAngle)*factor);
 }
 
-void Ball::BallPaddleCollision(const Paddle &playerPaddle) {
-	if (this->getPosition().y > (playerPaddle.getPosition().y)) { //Reflect ball differently based on where it collides
-		ballAngle = 3.14159265359 - ballAngle + 10 * (3.14159265359 /180);
-	}
-	else {
-		ballAngle = 3.14159265359 - ballAngle - 10 * (3.14159265359 / 180);
+void Ball::BallPaddleCollision(const Paddle &playerPaddle, const int &playerFlag) {
+	switch (playerFlag) {
+	case(1):
+		if (this->getPosition().y > (playerPaddle.getPosition().y)) { //Reflect ball differently based on where it collides
+			ballAngle = 3.14159265359 - ballAngle + 10 * (4 * 3.14159265359 / 180);
+		}
+		else {
+			ballAngle = 3.14159265359 - ballAngle - 10 * (4 * 3.14159265359 / 180);
+		}
+		break;
+	case(2):
+		if (this->getPosition().y > (playerPaddle.getPosition().y)) { //Reflect ball differently based on where it collides
+			ballAngle = -(3.14159265359 - ballAngle + 10 * (4 * 3.14159265359 / 180));
+		}
+		else {
+			ballAngle = -(3.14159265359 - ballAngle - 10 * (34 * .14159265359 / 180));
+		}
+		break;
 	}
 }
 

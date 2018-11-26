@@ -199,12 +199,12 @@ int Pong::Run() {
 			//Player One Paddle
 			if (pongBall.getGlobalBounds().intersects(playerOnePaddle.getGlobalBounds()) && cos(pongBall.GetAngle()) <= 0) { //cos(ballAngle) < 0 checks that the ball is coming from the right before reflecting
 				collide.play();
-				pongBall.BallPaddleCollision(playerOnePaddle);
+				pongBall.BallPaddleCollision(playerOnePaddle, 1);
 			}
 			//Player Two Paddle
 			if (pongBall.getGlobalBounds().intersects(playerTwoPaddle.getGlobalBounds()) && cos(pongBall.GetAngle()) >= 0) { //cos(ballAngle) > 0 checks that the ball is coming from the left before reflecting
 				collide.play();
-				pongBall.BallPaddleCollision(playerTwoPaddle);
+				pongBall.BallPaddleCollision(playerTwoPaddle, 2);
 			}
 			RenderGame();
 			window.display();
