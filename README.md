@@ -1,6 +1,6 @@
 # SFML Pong Game
 
-A simple Pong game developed using the SFML library.
+A simple Pong game developed using the SFML library. Ball speed is increased by hitting the ball at the edges of paddles and sharper angles of fire are produced likewise.
 
 ## Controls
 
