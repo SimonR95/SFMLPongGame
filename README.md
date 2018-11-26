@@ -16,7 +16,7 @@ Simply run the SFMLPong.exe file but ensure you keep it in the same directory as
 
 ## To do
 
-- Work on better ball physics
+- ~~Work on better ball physics~~
 - Add in network functionality
 - Add an options menu
 
