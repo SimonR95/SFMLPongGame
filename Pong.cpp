@@ -25,6 +25,7 @@ Pong::Pong() {
 
 void Pong::ResetGame() {
 	pongBall.SetAngle(0);
+	pongBall.SetBallSpeed(1);
 	pongBall.setPosition(screenWidth / 2, screenHeight / 2);
 	playerOneScore = 0;
 	playerOneText.setString("Player 1: " + std::to_string(playerOneScore));
@@ -57,8 +58,8 @@ void Pong::LoadSounds() {
 }
 
 void Pong::CreatePaddles() {
-	playerOnePaddle = Paddle(sf::Keyboard::Key::W, sf::Keyboard::Key::S, paddleSize, sf::Color::Red, sf::Color::White, 3, sf::Vector2f(50, screenWidth / 2), sf::Vector2f(paddleSize.x / 2, paddleSize.y / 2));
-	playerTwoPaddle = Paddle(sf::Keyboard::Key::Up, sf::Keyboard::Key::Down, paddleSize, sf::Color::Blue, sf::Color::White, 3, sf::Vector2f(screenWidth - 50, screenWidth / 2), sf::Vector2f(paddleSize.x / 2, paddleSize.y / 2));
+	playerOnePaddle = Paddle(sf::Keyboard::Key::W, sf::Keyboard::Key::S, paddleSize, sf::Color::Red, sf::Color::White, 3, sf::Vector2f(50, screenHeight / 2), sf::Vector2f(paddleSize.x / 2, paddleSize.y / 2));
+	playerTwoPaddle = Paddle(sf::Keyboard::Key::Up, sf::Keyboard::Key::Down, paddleSize, sf::Color::Blue, sf::Color::White, 3, sf::Vector2f(screenWidth - 50, screenHeight / 2), sf::Vector2f(paddleSize.x / 2, paddleSize.y / 2));
 }
 
 void Pong::CreateBall() {
@@ -77,6 +78,10 @@ void Pong::CreateText() {
 	playerTwoText.setFont(font);
 	pauseText = Text("P A U S E D", sf::Color::White, 50, sf::Vector2f((screenWidth / 2) - 165, (screenHeight / 2) - 30));
 	pauseText.setFont(font);
+	speedUpText = Text("+ SPEED UP +", sf::Color::White, 40, sf::Vector2f((screenWidth / 2) - 140, (screenHeight / 4)));
+	speedUpText.setFont(font);
+	speedDownText = Text("- SPEED DOWN -", sf::Color::White, 40, sf::Vector2f((screenWidth / 2) - 140, (screenHeight / 4 )));
+	speedDownText.setFont(font);
 }
 
 void Pong::RegisterScores(const int &player) {
@@ -84,11 +89,13 @@ void Pong::RegisterScores(const int &player) {
 	case 1:
 		playerOneScore++;
 		playerOneText.setString("Player 1: " + std::to_string(playerOneScore));
+		pongBall.SetBallSpeed(1);
 		pongBall.SetAngle(0); //Serve to Player 2
 		break;
 	case 2:
 		playerTwoScore++;
 		playerTwoText.setString("Player 2: " + std::to_string(playerTwoScore));
+		pongBall.SetBallSpeed(1);
 		pongBall.SetAngle(180 * (3.14159265359 / 180)); //Serve to Player 1
 		break;
 	default:
@@ -199,14 +206,38 @@ int Pong::Run() {
 			//Player One Paddle
 			if (pongBall.getGlobalBounds().intersects(playerOnePaddle.getGlobalBounds()) && cos(pongBall.GetAngle()) <= 0) { //cos(ballAngle) < 0 checks that the ball is coming from the right before reflecting
 				collide.play();
-				pongBall.BallPaddleCollision(playerOnePaddle, 1);
+				std::string speedCheck = pongBall.BallPaddleCollision(playerOnePaddle, 1);
+				if (speedCheck == "Up") {
+					speedUpFlag = 10000000 * time;
+				}
+				else if (speedCheck == "Down") {
+					speedDownFlag = 10000000 * time;
+				}
 			}
 			//Player Two Paddle
 			if (pongBall.getGlobalBounds().intersects(playerTwoPaddle.getGlobalBounds()) && cos(pongBall.GetAngle()) >= 0) { //cos(ballAngle) > 0 checks that the ball is coming from the left before reflecting
 				collide.play();
-				pongBall.BallPaddleCollision(playerTwoPaddle, 2);
+				std::string speedCheck = pongBall.BallPaddleCollision(playerTwoPaddle, 2);
+				if (speedCheck == "Up") {
+					speedUpFlag = 10000000 * time;
+				}
+				else if (speedCheck == "Down") {
+					speedDownFlag = 10000000 * time;
+				}
 			}
 			RenderGame();
+			// Display SpeedUp for set amount of time, overwrite speedDown flag if already present
+			if (speedUpFlag != 0 && speedUpFlag > speedDownFlag) {
+				speedDownFlag = 0;
+				window.draw(speedUpText);
+				speedUpFlag--;
+			}
+			// Display SpeedDown for set amount of time, overwrite SpeedUp flag if already present
+			if (speedDownFlag != 0 && speedDownFlag > speedUpFlag) {
+				speedUpFlag = 0;
+				window.draw(speedDownText);
+				speedDownFlag--;
+			}
 			window.display();
 			break;
 		case GameState::Paused:

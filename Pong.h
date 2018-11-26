@@ -35,6 +35,8 @@ private:
 	float screenWidth;
 	float screenHeight;
 	float paddleSpeed;
+	int speedUpFlag;
+	int speedDownFlag;
 
 	//SFML Objects
 	sf::Music music;
@@ -60,6 +62,8 @@ private:
 	Text playerOneText;
 	Text playerTwoText;
 	Text pauseText;
+	Text speedUpText;
+	Text speedDownText;
 	Menu menu;
 };
 

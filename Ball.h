@@ -13,12 +13,14 @@ public:
 	//Methods
 	void MoveBall(const float &factor);
 	void InverseAngle();
-	void BallPaddleCollision(const Paddle &playerPaddle, const int &playerFlag);
+	std::string BallPaddleCollision(const Paddle &playerPaddle, const int &playerFlag);
 	void SetAngle(const float &angle);
+	void SetBallSpeed(const int &speed);
 	float GetAngle();
 
 private:
 	//Variables
+	float ballSpeed;
 	int ballPointCount;
 	int ballRadius;
 	float ballAngle;
