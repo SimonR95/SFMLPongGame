@@ -78,9 +78,9 @@ void Pong::CreateText() {
 	playerTwoText.setFont(font);
 	pauseText = Text("P A U S E D", sf::Color::White, 50, sf::Vector2f((screenWidth / 2) - 165, (screenHeight / 2) - 30));
 	pauseText.setFont(font);
-	speedUpText = Text("+ SPEED UP +", sf::Color::White, 40, sf::Vector2f((screenWidth / 2) - 140, (screenHeight / 4)));
+	speedUpText = Text("+ SPEED UP +", sf::Color::Green, 40, sf::Vector2f((screenWidth / 2) - 140, (screenHeight / 4)));
 	speedUpText.setFont(font);
-	speedDownText = Text("- SPEED DOWN -", sf::Color::White, 40, sf::Vector2f((screenWidth / 2) - 140, (screenHeight / 4 )));
+	speedDownText = Text("- SPEED DOWN -", sf::Color::Red, 40, sf::Vector2f((screenWidth / 2) - 140, (screenHeight / 4 )));
 	speedDownText.setFont(font);
 }
 
